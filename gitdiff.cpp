@@ -10,21 +10,23 @@ typedef vector<int> vi;
 
 // process levishtine distance
 ll diff(string a, string b){
-    cout<<"diff of "<<a<<" and "<<b<<endl;
     if(a == "") return b.size();
     if(b == "") return a.size();
     if(a == b) return 0;
-    
-    //int res = 0;
-    //while(!b.empty() && a[0] != b[0]){
-    //    b = b.substr(1);
-    //    res++;
-    //}
-    //return res + diff(a.substr(1),b.substr(1));
-    //if(a[0] == b[0]) return diff(a.substr(1), b.substr(1));
-    //if(a[1] == b[0]) return 1+diff(a.substr(2), b.substr(1));
-    //if(a[0] == b[1]) return 1+diff(a.substr(1), b.substr(2));
-    //return 2+diff(a.substr(1),b.substr(1));
+
+    vector<vector<ll>> dp = vector<vector<ll>>(a.size()+1,vector<ll>(b.size()+1, 0LL));
+
+    rep(i,0,a.size()+1) dp[i][0] = i;
+    rep(i,0,b.size()+1) dp[0][i] = i;
+
+    rep(i,1,a.size()+1){
+        rep(j,1,b.size()+1){
+            if(a[i-1] == b[j-1]) dp[i][j] = dp[i-1][j-1];
+            else dp[i][j] = 1+min(dp[i-1][j], dp[i][j-1]);
+        }
+    }
+
+    return dp[a.size()][b.size()];
 }
 
 int main() {
